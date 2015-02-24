@@ -15,7 +15,7 @@ CalendarConnector.prototype.execute = function(name, callback, args) {
   ret = cordova.exec(
     callback, // called when signature capture is successful
     this.failure, // called when signature capture encounters an error
-    'CalendarConnectorPlugin', // Tell cordova that we want to run "PushNotificationPlugin"
+    'CalendarConnectorPlugin', // Tell cordova that we want to run "CalendarConnectorPlugin"
     name, // Tell the plugin the action we want to perform
     args // List of arguments to the plugin
   );
@@ -36,6 +36,10 @@ CalendarConnector.prototype.startService = function(callback) {
 
 CalendarConnector.prototype.stopService = function(callback) {
   this.execute("stopService", callback);
+};
+
+CalendarConnector.prototype.forceUpdate = function(callback) {
+  this.execute("forceUpdate", callback);
 };
 
 module.exports = new CalendarConnector();
