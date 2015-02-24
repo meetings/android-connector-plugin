@@ -14,5 +14,6 @@ public class AutoStart extends BroadcastReceiver
     {
         Intent serviceIntent = new Intent(context, ConnectorService.class);
         context.startService(serviceIntent);
+        
     }
 }

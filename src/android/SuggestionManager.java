@@ -35,13 +35,15 @@ public class SuggestionManager {
 
     private int updateSuggestionsSuccessCounter;
 
-    public SuggestionManager(Context context, String userId, String token) {
+    public SuggestionManager(Context context) {
         this.context = context;
 
         String appVersion = Device.appVersion(context);
 
-        RestAdapter sessionAdapter = SessionAdapter.build(userId, token, appVersion);
-        suggestionService = new SuggestionService(sessionAdapter, userId);
+        SessionManager sessionManager = new SessionManager(context);
+        
+        RestAdapter sessionAdapter = SessionAdapter.build(sessionManager.getUserId(), sessionManager.getToken(), appVersion);
+        suggestionService = new SuggestionService(sessionAdapter, sessionManager.getUserId());
 
         previousSuggestions = new HashMap<String, ArrayList<CalendarSuggestion>>();
 
@@ -81,7 +83,6 @@ public class SuggestionManager {
 
             // If new suggestions were found or if user has pressed 'Sync now', send new results to backend
             if (forceUpdate || hasNewMeetings(calendar.getName(), suggestions)) {
-//                previousSuggestions.put(calendar.getName(), suggestions);
 
                 updateList.add(new SuggestionBatch(containerName, "phone", androidId, calendar.getName(), calendar.getName(), calendar.getIsPrimary(), todayEpoch, threeMonthsFromNowEpoch, suggestions));
             }

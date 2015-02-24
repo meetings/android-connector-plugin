@@ -33,7 +33,7 @@ public class ConnectorService extends IntentService {
         super.onCreate();
         running = true;
 
-        suggestionManager = new SuggestionManager(this, "5199", "null");
+        suggestionManager = new SuggestionManager(this);
 
         EventBus.getDefault().register(this);
     }
