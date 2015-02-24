@@ -8,7 +8,7 @@ CalendarConnector.prototype.failure = function(e) {
 };
 
 CalendarConnector.prototype.execute = function(name, callback, args) {
-  if (args.length === 0) {
+  if (typeof(args) === "undefined") {
     args = [];
   }
 
