@@ -22,6 +22,14 @@ CalendarConnector.prototype.execute = function(name, callback, args) {
   return ret;
 };
 
+CalendarConnector.prototype.getUserId = function(callback) {
+  this.execute("getUserId", callback);
+};
+
+CalendarConnector.prototype.getToken = function(callback) {
+  this.execute("getToken", callback);
+};
+
 CalendarConnector.prototype.signIn = function(userId, token, email, callback) {
   this.execute("signIn", callback, [userId, token, email]);
 };
