@@ -80,7 +80,6 @@ public class CalendarManager {
         ArrayList<SuggestionSource> sources = new ArrayList<SuggestionSource>();
 
         while (cur.moveToNext()) {
-            long calId = cur.getLong(PROJECTION_ID_INDEX);
             String displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
             short isPrimary = cur.getShort(PROJECTION_IS_PRIMARY_INDEX);
 
@@ -169,7 +168,6 @@ public class CalendarManager {
         ArrayList<Attendee> attendees = new ArrayList<Attendee>();
 
         while (cur.moveToNext()) {
-            long attId = cur.getLong(PROJECTION_ID_INDEX);
             String attendeeName = cur.getString(PROJECTION_ATTENDEE_NAME_INDEX);
             String attendeeEmail = cur.getString(PROJECTION_ATTENDEE_EMAIL_INDEX);
 

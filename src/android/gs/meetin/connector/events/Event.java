@@ -13,6 +13,7 @@ public abstract class Event {
         // Suggestion
         SET_LAST_SYNC_TIME,
         UPDATE_SUGGESTIONS,
+        UPDATE_SUGGESTIONS_SUCCESSFUL,
 
         // UI
         SET_BUTTONS_ENABLED,

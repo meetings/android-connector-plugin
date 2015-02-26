@@ -3,12 +3,9 @@ package gs.meetin.connector;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
-
 import de.greenrobot.event.EventBus;
+import gs.meetin.connector.events.Event;
 import gs.meetin.connector.events.SuggestionEvent;
-import gs.meetin.connector.events.UIEvent;
-
-import static gs.meetin.connector.events.Event.EventType.SET_BUTTONS_ENABLED;
 import static gs.meetin.connector.events.Event.EventType.UPDATE_SUGGESTIONS;
 
 public class ConnectorService extends IntentService {
@@ -52,13 +49,14 @@ public class ConnectorService extends IntentService {
         while (running) {
             synchronized (this) {
                 try {
+                    wait(Constants.updateInterval);
+                    
                     Log.d("Mtn.gs", "Syncing suggestions... ");
 
                     SuggestionEvent suggestionEvent = new SuggestionEvent(UPDATE_SUGGESTIONS);
                     suggestionEvent.putBoolean("forceUpdate", false);
                     EventBus.getDefault().post(suggestionEvent);
 
-                    wait(Constants.updateInterval);
                 } catch (Exception e) {
                 }
             }
@@ -66,11 +64,8 @@ public class ConnectorService extends IntentService {
     }
 
     public void onEvent(SuggestionEvent event) {
-        switch (event.getType()) {
-
-            case UPDATE_SUGGESTIONS:
-                suggestionManager.update(event.getBoolean("forceUpdate"));
-                break;
+		if (event.getType() == Event.EventType.UPDATE_SUGGESTIONS) {
+        	suggestionManager.update(event.getBoolean("forceUpdate"), event.getCallbackContext());
         }
     }
 }

@@ -1,15 +1,8 @@
 package gs.meetin.connector;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-
-import de.greenrobot.event.EventBus;
-import gs.meetin.connector.events.SessionEvent;
-
-import static gs.meetin.connector.events.Event.EventType.LOGIN;
-import static gs.meetin.connector.events.Event.EventType.LOGOUT;
 
 public class SessionManager {
 

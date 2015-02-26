@@ -1,9 +1,14 @@
 package gs.meetin.connector;
 
+import static gs.meetin.connector.events.Event.EventType.UPDATE_SUGGESTIONS;
+import static gs.meetin.connector.events.Event.EventType.UPDATE_SUGGESTIONS_SUCCESSFUL;
 import android.content.Context;
 import android.util.Log;
 
+import org.apache.cordova.CallbackContext;
 import org.joda.time.DateTime;
+
+import de.greenrobot.event.EventBus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +19,7 @@ import gs.meetin.connector.dto.CalendarSuggestion;
 import gs.meetin.connector.dto.SourceContainer;
 import gs.meetin.connector.dto.SuggestionBatch;
 import gs.meetin.connector.dto.SuggestionSource;
+import gs.meetin.connector.events.SuggestionEvent;
 import gs.meetin.connector.services.SuggestionService;
 import gs.meetin.connector.utils.DateHelper;
 import gs.meetin.connector.utils.Device;
@@ -51,7 +57,7 @@ public class SuggestionManager {
         androidId = Device.getAndroidId(context.getContentResolver());
     }
 
-    public boolean update(boolean forceUpdate) {
+    public boolean update(boolean forceUpdate, final CallbackContext callbackContext) {
         final short unmanned = (short) (forceUpdate ? 0 : 1);
 
         ArrayList<SuggestionSource> suggestionSources = new CalendarManager().getCalendars(context);
@@ -61,7 +67,7 @@ public class SuggestionManager {
         if (forceUpdate || previousSuggestions.size() < suggestionSources.size() || !updateList.isEmpty()) {
             // Found new suggestions
             updateSuggestionsSuccessCounter = 0;
-            updateSuggestionSources(unmanned, suggestionSources, onSuggestionSourcesUpdated(unmanned, updateList));
+            updateSuggestionSources(unmanned, suggestionSources, onSuggestionSourcesUpdated(unmanned, callbackContext, updateList));
 
             return true;
         } else {
@@ -103,9 +109,9 @@ public class SuggestionManager {
         updateSuggestionSources(unmanned, new ArrayList<SuggestionSource>(), null);
     }
 
-    public void updateSuggestions(short unmanned, ArrayList<SuggestionBatch> updateList) {
+    public void updateSuggestions(short unmanned, final CallbackContext callbackContext, ArrayList<SuggestionBatch> updateList) {
         for (SuggestionBatch batch : updateList) {
-            suggestionService.updateSuggestions(unmanned, batch, onSuggestionsUpdated(unmanned, batch, updateList.size()));
+            suggestionService.updateSuggestions(unmanned, batch, onSuggestionsUpdated(unmanned, callbackContext, batch, updateList.size()));
         }
     }
 
@@ -127,12 +133,12 @@ public class SuggestionManager {
         return !newList.isEmpty() || !previousList.isEmpty();
     }
 
-    private Callback onSuggestionSourcesUpdated(final short unmanned, final ArrayList<SuggestionBatch> updateList) {
+    private Callback onSuggestionSourcesUpdated(final short unmanned, final CallbackContext callbackContext, final ArrayList<SuggestionBatch> updateList) {
         return new Callback() {
 
             @Override
             public void success(Object o, Response response) {
-                updateSuggestions(unmanned, updateList);
+                updateSuggestions(unmanned, callbackContext, updateList);
 
             }
 
@@ -143,7 +149,7 @@ public class SuggestionManager {
         };
     }
 
-    private Callback onSuggestionsUpdated(final short unmanned, final SuggestionBatch batch, final int updateListSize) {
+    private Callback onSuggestionsUpdated(final short unmanned, final CallbackContext callbackContext, final SuggestionBatch batch, final int updateListSize) {
         return new Callback() {
 
             @Override
@@ -154,9 +160,11 @@ public class SuggestionManager {
 
                 updateSuggestionsSuccessCounter++;
 
-                // Get updated sources on last success to update last sync time
-                if (updateSuggestionsSuccessCounter == updateListSize){
-                    suggestionService.getSources(unmanned);
+                // Tell javascript to update last sync time
+                if (updateSuggestionsSuccessCounter == updateListSize) {
+                    SuggestionEvent suggestionEvent = new SuggestionEvent(UPDATE_SUGGESTIONS_SUCCESSFUL);
+                    suggestionEvent.setCallbackContext(callbackContext);
+                    EventBus.getDefault().post(suggestionEvent);
                 }
             }
 
