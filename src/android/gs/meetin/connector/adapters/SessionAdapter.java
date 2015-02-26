@@ -4,8 +4,7 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import gs.meetin.connector.Constants;
-
+import gs.meetin.connector.AppConfig;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
@@ -29,8 +28,7 @@ public class SessionAdapter {
                     }
                 })
                 .setConverter(new GsonConverter(gson))
-                .setEndpoint(Constants.apiBaseURL)
-                .setEndpoint("https://api-dev.meetin.gs/v1/")
+                .setEndpoint(AppConfig.getInstance().getApiBaseURL())
                 .build();
     }
 }

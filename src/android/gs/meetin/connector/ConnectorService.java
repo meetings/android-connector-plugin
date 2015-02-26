@@ -49,7 +49,7 @@ public class ConnectorService extends IntentService {
         while (running) {
             synchronized (this) {
                 try {
-                    wait(Constants.updateInterval);
+                    wait(AppConfig.getInstance().getUpdateInterval());
                     
                     Log.d("Mtn.gs", "Syncing suggestions... ");
 

@@ -54,7 +54,7 @@
         <source-file src="src/android/gs/meetin/connector/CalendarConnectorPlugin.java" target-dir="src/gs/meetin/connector" />
         <source-file src="src/android/gs/meetin/connector/CalendarManager.java" target-dir="src/gs/meetin/connector" />
         <source-file src="src/android/gs/meetin/connector/ConnectorService.java" target-dir="src/gs/meetin/connector" />
-        <source-file src="src/android/gs/meetin/connector/Constants.java" target-dir="src/gs/meetin/connector" />
+        <source-file src="src/android/gs/meetin/connector/AppConfig.java" target-dir="src/gs/meetin/connector" />
         <source-file src="src/android/gs/meetin/connector/SessionManager.java" target-dir="src/gs/meetin/connector" />
         <source-file src="src/android/gs/meetin/connector/SuggestionManager.java" target-dir="src/gs/meetin/connector" />
 

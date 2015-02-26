@@ -17,6 +17,7 @@ import static gs.meetin.connector.events.Event.EventType.UPDATE_SUGGESTIONS;
 
 public class CalendarConnectorPlugin extends CordovaPlugin {
 
+    public static final String ACTION_INIT = "init";
     public static final String ACTION_GET_USER_ID = "getUserId";
     public static final String ACTION_GET_TOKEN = "getToken";
     public static final String ACTION_SIGN_IN = "signIn";
@@ -33,7 +34,10 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
     @Override
     public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
 
-        if (ACTION_GET_USER_ID.equals(action)) {
+    	if (ACTION_INIT.equals(action)) {
+            return init(data, callbackContext);
+
+        } else if (ACTION_GET_USER_ID.equals(action)) {
             return getUserId(callbackContext);
 
         } else if (ACTION_GET_TOKEN.equals(action)) {
@@ -57,6 +61,26 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
         }
         
         return false;
+    }
+    
+    private boolean init(final JSONArray data, final CallbackContext callbackContext) {
+        try {
+        	String apiBaseURL = data.getString(0);
+			Long updateInterval  = data.getLong(1);
+			
+			if (apiBaseURL != null) {
+                AppConfig.getInstance().setApiBaseURL(apiBaseURL);
+            }
+            if (updateInterval != null) {
+                AppConfig.getInstance().setUpdateInterval(updateInterval);
+            }
+
+			callbackContext.success();
+			return true;  
+		} catch (JSONException e) {
+            callbackContext.error(e.getMessage());
+            return false;
+		}
     }
     
     private boolean getUserId(final CallbackContext callbackContext) {
