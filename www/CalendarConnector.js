@@ -56,4 +56,8 @@ CalendarConnector.prototype.forceUpdate = function(callback) {
   this.execute("forceUpdate", callback);
 };
 
+CalendarConnector.prototype.removeSources = function(callback) {
+  this.execute("removeSources", callback);
+};
+
 module.exports = new CalendarConnector();

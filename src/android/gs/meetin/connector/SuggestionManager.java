@@ -1,6 +1,5 @@
 package gs.meetin.connector;
 
-import static gs.meetin.connector.events.Event.EventType.UPDATE_SUGGESTIONS;
 import static gs.meetin.connector.events.Event.EventType.UPDATE_SUGGESTIONS_SUCCESSFUL;
 import android.content.Context;
 import android.util.Log;

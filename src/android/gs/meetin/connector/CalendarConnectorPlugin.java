@@ -25,6 +25,7 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
     public static final String ACTION_START_SERVICE = "startService";
     public static final String ACTION_STOP_SERVICE = "stopService";
     public static final String ACTION_FORCE_UPDATE = "forceUpdate";
+    public static final String ACTION_REMOVE_SOURCES = "removeSources";
         
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -57,6 +58,9 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
 
         } else if (ACTION_FORCE_UPDATE.equals(action)) {
             return forceUpdate(callbackContext);
+     
+        } else if (ACTION_REMOVE_SOURCES.equals(action)) {
+            return removeSources(callbackContext);
      
         }
         
@@ -155,6 +159,15 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
         PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
         pluginResult.setKeepCallback(true);
         callbackContext.sendPluginResult(pluginResult);
+        return true;
+    }
+    
+    // Remove suggestion sources.
+    // No callback for this one, let's just hope that the suggestion sources really are removed.
+    private boolean removeSources(final CallbackContext callbackContext) {;
+        new SuggestionManager(cordova.getActivity().getApplicationContext()).removeSuggestionSources();
+        
+        callbackContext.success();
         return true;
     }
 
