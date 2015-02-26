@@ -2,33 +2,19 @@ package gs.meetin.connector.services;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
-import java.util.List;
-
 import de.greenrobot.event.EventBus;
-import gs.meetin.connector.dto.ApiError;
-import gs.meetin.connector.dto.MtnResponse;
 import gs.meetin.connector.dto.SourceContainer;
 import gs.meetin.connector.dto.SuggestionBatch;
-import gs.meetin.connector.dto.SuggestionSource;
 import gs.meetin.connector.events.ErrorEvent;
-import gs.meetin.connector.utils.Device;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.http.Body;
-import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.Path;
-import retrofit.mime.MimeUtil;
-import retrofit.mime.TypedByteArray;
-import retrofit.mime.TypedInput;
 
 public class SuggestionService {
 

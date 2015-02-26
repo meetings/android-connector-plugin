@@ -2,8 +2,6 @@ package gs.meetin.connector.utils;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.util.Locale;
 
 public class DateHelper {

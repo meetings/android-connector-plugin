@@ -4,20 +4,9 @@ import java.util.HashMap;
 
 public abstract class Event {
     public static enum EventType {
-        // Login
-        LOGIN,
-        LOGOUT,
-        PIN_REQUEST_SUCCESSFUL,
-        LOGIN_SUCCESSFUL,
-
         // Suggestion
-        SET_LAST_SYNC_TIME,
         UPDATE_SUGGESTIONS,
-        UPDATE_SUGGESTIONS_SUCCESSFUL,
-
-        // UI
-        SET_BUTTONS_ENABLED,
-        SET_BUTTONS_DISABLED
+        UPDATE_SUGGESTIONS_SUCCESSFUL
     }
 
     private EventType type;

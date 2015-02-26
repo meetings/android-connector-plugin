@@ -19,25 +19,18 @@ public class SessionManager {
     private static final String PREF_NAME = "SwipeToMeetPref";
 
     // All Shared Preferences Keys
-    private static final String IS_LOGIN = "isLoggedIn";
-
     public static final String KEY_USER_ID = "userId";
-
     public static final String KEY_TOKEN = "token";
-
-    public static final String KEY_EMAIL = "email";
-
-    public static final String KEY_LAST_SYNC = "lastsync";
 
     public SessionManager(Context context){
         this.context = context;
         pref = this.context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
     }
 
-    public void signIn(String userId, String token, String email) {
+    public void signIn(String userId, String token) {
         Log.d("Mtn.gs", "Logging in");
 
-        saveSessionData(userId, token, email);
+        saveSessionData(userId, token);
     }
 
     public void signOut() {
@@ -46,17 +39,11 @@ public class SessionManager {
         clearSessionData();
     }
 
-    public boolean isLoggedIn(){
-        return pref.getBoolean(IS_LOGIN, false);
-    }
-
-    private void saveSessionData(String userId, String token, String email){
+    private void saveSessionData(String userId, String token){
         SharedPreferences.Editor editor = pref.edit();
 
-        editor.putBoolean(IS_LOGIN, true);
         editor.putString(KEY_USER_ID, userId);
         editor.putString(KEY_TOKEN, token);
-        editor.putString(KEY_EMAIL, email);
 
         editor.commit();
     }
@@ -64,11 +51,8 @@ public class SessionManager {
     private void clearSessionData() {
         SharedPreferences.Editor editor = pref.edit();
 
-        editor.putBoolean(IS_LOGIN, false);
         editor.remove(KEY_USER_ID);
         editor.remove(KEY_TOKEN);
-        editor.remove(KEY_EMAIL);
-        editor.remove(KEY_LAST_SYNC);
 
         editor.commit();
     }
@@ -78,19 +62,5 @@ public class SessionManager {
     }
     public String getToken(){
         return pref.getString(KEY_TOKEN, null);
-    }
-    public String getUserEmail(){
-        return pref.getString(KEY_EMAIL, null);
-    }
-    public long getLastSync () {
-        return pref.getLong(KEY_LAST_SYNC, 0);
-    }
-
-    public void setLastSync(long lastSync) {
-        SharedPreferences.Editor editor = pref.edit();
-
-        editor.putLong(KEY_LAST_SYNC, lastSync);
-
-        editor.commit();
     }
 }

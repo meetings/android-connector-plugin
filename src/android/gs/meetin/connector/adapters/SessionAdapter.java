@@ -6,18 +6,9 @@ import com.google.gson.GsonBuilder;
 
 import gs.meetin.connector.Constants;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
-import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 import retrofit.converter.GsonConverter;
-import retrofit.mime.MimeUtil;
-import retrofit.mime.TypedByteArray;
-import retrofit.mime.TypedInput;
 
 public class SessionAdapter {
 
