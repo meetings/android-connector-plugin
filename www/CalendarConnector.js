@@ -3,61 +3,57 @@ var CalendarConnector = function () {
 
 };
 
-CalendarConnector.prototype.failure = function(e) {
-  console.log("error", e);
-};
-
-CalendarConnector.prototype.execute = function(name, callback, args) {
+CalendarConnector.prototype.execute = function(name, successCallback, errorCallback, args) {
   if (typeof(args) === "undefined") {
     args = [];
   }
 
   ret = cordova.exec(
-    callback, // called when signature capture is successful
-    this.failure, // called when signature capture encounters an error
-    'CalendarConnectorPlugin', // Tell cordova that we want to run "CalendarConnectorPlugin"
-    name, // Tell the plugin the action we want to perform
-    args // List of arguments to the plugin
+    successCallback,
+    errorCallback,
+    'CalendarConnectorPlugin',
+    name,
+    args
   );
   return ret;
 };
 
-CalendarConnector.prototype.init = function(appConfig, callback) {
+CalendarConnector.prototype.init = function(appConfig, successCallback, errorCallback) {
   appConfig = appConfig || {};
 
-  this.execute("init", callback, [appConfig.apiBaseUrl, appConfig.pollInterval]);
+  this.execute("init", successCallback, errorCallback, [appConfig.apiBaseUrl, appConfig.pollInterval]);
 };
 
-CalendarConnector.prototype.getUserId = function(callback) {
-  this.execute("getUserId", callback);
+CalendarConnector.prototype.getUserId = function(successCallback, errorCallback) {
+  this.execute("getUserId", successCallback, errorCallback);
 };
 
-CalendarConnector.prototype.getToken = function(callback) {
-  this.execute("getToken", callback);
+CalendarConnector.prototype.getToken = function(successCallback, errorCallback) {
+  this.execute("getToken", successCallback, errorCallback);
 };
 
-CalendarConnector.prototype.signIn = function(userId, token, email, callback) {
-  this.execute("signIn", callback, [userId, token, email]);
+CalendarConnector.prototype.signIn = function(userId, token, email, successCallback, errorCallback) {
+  this.execute("signIn", successCallback, errorCallback, [userId, token, email]);
 };
 
-CalendarConnector.prototype.signOut = function(callback) {
-  this.execute("signOut", callback);
+CalendarConnector.prototype.signOut = function(successCallback, errorCallback) {
+  this.execute("signOut", successCallback, errorCallback);
 };
 
-CalendarConnector.prototype.startService = function(callback) {
-  this.execute("startService", callback);
+CalendarConnector.prototype.startService = function(successCallback, errorCallback) {
+  this.execute("startService", successCallback, errorCallback);
 };
 
-CalendarConnector.prototype.stopService = function(callback) {
-  this.execute("stopService", callback);
+CalendarConnector.prototype.stopService = function(successCallback, errorCallback) {
+  this.execute("stopService", successCallback, errorCallback);
 };
 
-CalendarConnector.prototype.forceUpdate = function(callback) {
-  this.execute("forceUpdate", callback);
+CalendarConnector.prototype.forceUpdate = function(successCallback, errorCallback) {
+  this.execute("forceUpdate", successCallback, errorCallback);
 };
 
-CalendarConnector.prototype.removeSources = function(callback) {
-  this.execute("removeSources", callback);
+CalendarConnector.prototype.removeSources = function(successCallback, errorCallback) {
+  this.execute("removeSources", successCallback, errorCallback);
 };
 
 module.exports = new CalendarConnector();
