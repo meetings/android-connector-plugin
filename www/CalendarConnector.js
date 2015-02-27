@@ -18,10 +18,10 @@ CalendarConnector.prototype.execute = function(name, successCallback, errorCallb
   return ret;
 };
 
-CalendarConnector.prototype.init = function(appConfig, successCallback, errorCallback) {
+CalendarConnector.prototype.init = function(userId, token, appConfig, successCallback, errorCallback) {
   appConfig = appConfig || {};
 
-  this.execute("init", successCallback, errorCallback, [appConfig.apiBaseUrl, appConfig.pollInterval]);
+  this.execute("init", successCallback, errorCallback, [userId, token, appConfig.apiBaseUrl, appConfig.pollInterval]);
 };
 
 CalendarConnector.prototype.getUserId = function(successCallback, errorCallback) {

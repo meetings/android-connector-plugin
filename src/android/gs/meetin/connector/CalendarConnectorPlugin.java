@@ -26,7 +26,7 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
     public static final String ACTION_STOP_SERVICE = "stopService";
     public static final String ACTION_FORCE_UPDATE = "forceUpdate";
     public static final String ACTION_REMOVE_SOURCES = "removeSources";
-        
+
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
@@ -58,20 +58,26 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
 
         } else if (ACTION_FORCE_UPDATE.equals(action)) {
             return forceUpdate(callbackContext);
-     
+
         } else if (ACTION_REMOVE_SOURCES.equals(action)) {
             return removeSources(callbackContext);
-     
+
         }
-        
+
         return false;
     }
-    
+
     private boolean init(final JSONArray data, final CallbackContext callbackContext) {
         try {
-        	String apiBaseURL = data.getString(0);
-			Long updateInterval  = data.getLong(1);
-			
+            String userId = data.getString(0);
+            String token  = data.getString(1);
+
+            SessionManager sessionManager = new SessionManager(cordova.getActivity().getApplicationContext());
+            sessionManager.signIn(userId, token);
+
+        	String apiBaseURL = data.getString(2);
+			Long updateInterval  = data.getLong(3);
+
 			if (apiBaseURL != null) {
                 AppConfig.getInstance().setApiBaseURL(apiBaseURL);
             }
@@ -80,27 +86,27 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
             }
 
 			callbackContext.success();
-			return true;  
+			return true;
 		} catch (JSONException e) {
             callbackContext.error(e.getMessage());
             return false;
 		}
     }
-    
+
     private boolean getUserId(final CallbackContext callbackContext) {
         SessionManager sessionManager = new SessionManager(cordova.getActivity().getApplicationContext());
         String userId = sessionManager.getUserId();
-        
+
         callbackContext.success(userId);
         return true;}
-    
+
     private boolean getToken(final CallbackContext callbackContext) {
         SessionManager sessionManager = new SessionManager(cordova.getActivity().getApplicationContext());
         String token = sessionManager.getToken();
-        
+
         callbackContext.success(token);
         return true;}
-    
+
     private boolean signIn(final JSONArray data, final CallbackContext callbackContext) {
 
         try {
@@ -109,10 +115,10 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
 
             SessionManager sessionManager = new SessionManager(cordova.getActivity().getApplicationContext());
             sessionManager.signIn(userId, token);
-            
+
             callbackContext.success();
             return true;
-            
+
         } catch (JSONException e) {
             callbackContext.error(e.getMessage());
             return false;
@@ -122,18 +128,18 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
     private boolean signOut(final CallbackContext callbackContext) {
         Intent serviceIntent = new Intent(cordova.getActivity().getApplicationContext(), ConnectorService.class);
         cordova.getActivity().stopService(serviceIntent);
- 
+
         SessionManager sessionManager = new SessionManager(cordova.getActivity().getApplicationContext());
         sessionManager.signOut();
-        
+
         callbackContext.success();
         return true;
     }
-    
+
     private boolean startCalendarService(final CallbackContext callbackContext) {
         Intent serviceIntent = new Intent(cordova.getActivity().getApplicationContext(), ConnectorService.class);
         cordova.getActivity().startService(serviceIntent);
-                
+
         callbackContext.success();
         return true;
     }
@@ -150,23 +156,23 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
     	if (!EventBus.getDefault().isRegistered(this)) {
     		EventBus.getDefault().register(this);
     	}
-    	        
+
         SuggestionEvent suggestionEvent = new SuggestionEvent(UPDATE_SUGGESTIONS);
         suggestionEvent.setCallbackContext(callbackContext);
         suggestionEvent.putBoolean("forceUpdate", true);
         EventBus.getDefault().post(suggestionEvent);
-        
+
         PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
         pluginResult.setKeepCallback(true);
         callbackContext.sendPluginResult(pluginResult);
         return true;
     }
-    
+
     // Remove suggestion sources.
     // No callback for this one, let's just hope that the suggestion sources really are removed.
     private boolean removeSources(final CallbackContext callbackContext) {;
         new SuggestionManager(cordova.getActivity().getApplicationContext()).removeSuggestionSources();
-        
+
         callbackContext.success();
         return true;
     }
@@ -174,7 +180,7 @@ public class CalendarConnectorPlugin extends CordovaPlugin {
     public void onEvent(SuggestionEvent event) {
         if (event.getType() == Event.EventType.UPDATE_SUGGESTIONS_SUCCESSFUL) {
             CallbackContext callbackContext = event.getCallbackContext();
-            
+
             if (callbackContext != null) {
             	PluginResult pluginResult = new PluginResult(PluginResult.Status.OK);
                 pluginResult.setKeepCallback(false);
