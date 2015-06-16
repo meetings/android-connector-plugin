@@ -6,8 +6,8 @@ package gs.meetin.connector;
 public class AppConfig {
 
 	// Default values for appConfig
-    private String apiBaseURL = "https://api-dev.meetin.gs/v1";
-    private long updateInterval = (1000 * 60) * 5;
+    private String apiBaseURL = "https://api.meetin.gs/v1";
+    private long updateInterval = (1000 * 60) * 10;
     
     private static AppConfig instance = null;
     
